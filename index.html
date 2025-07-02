@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Pair Weekly Bias Analysis | July 2, 2025</title>
+    <title>Price-Trader Analysis | July 2, 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Neutral Harmony -->
+    <!-- Chosen Palette: Futuristic Neon -->
     <!-- Application Structure Plan: A top-down, progressive disclosure model. The app starts with a high-level "Weekly Bias Dashboard" showing the final conclusions for immediate user understanding. It then provides a summary of "Overarching Market Drivers" for context. Finally, a tab-based "Detailed Analysis" section allows users to explore the granular data (Central Bank policies, individual pair analysis with charts and technicals) without being overwhelmed. This non-linear, interactive structure is chosen over the report's linear format to empower users to quickly find the information most relevant to them, enhancing usability and information retention. -->
     <!-- Visualization & Content Choices:
         - Report Info: Executive Summary Biases -> Goal: Inform -> Viz/Presentation: Large summary cards with icons -> Interaction: Click to scroll to detail -> Justification: Provides the core "answer" instantly.
@@ -19,16 +19,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FDFBF8; /* Warm off-white */
-            color: #3f3c3a; /* Muted dark brown/grey */
+            background-color: #0F0F2A; /* Very Dark Blue/Purple */
+            color: #E0E0FF; /* Light Lavender */
         }
         .active-tab {
-            background-color: #A69E92; /* Muted accent */
-            color: #FDFBF8;
+            background-color: #00FFFF; /* Neon Cyan */
+            color: #0F0F2A;
+            box-shadow: 0 0 8px #00FFFF;
         }
         .inactive-tab {
-            background-color: #EAE6E1; /* Light neutral */
-            color: #6d6a68;
+            background-color: #1F1F3A; /* Darker Blue/Purple */
+            color: #E0E0FF;
+            border: 1px solid #3A3A5A;
         }
         .chart-container {
             position: relative;
@@ -37,6 +39,9 @@
             max-height: 40vh;
             width: 100%;
             max-width: 800px;
+            background-color: #1F1F3A; /* Darker background for charts */
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 1rem; /* p-4 */
         }
         @media (min-width: 768px) {
             .chart-container {
@@ -44,11 +49,13 @@
             }
         }
         .bias-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            border: 1px solid #3A3A5A;
         }
         .bias-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5), 0 0 5px rgba(0, 255, 255, 0.3); /* Neon glow */
+            border-color: #00FFFF;
         }
         .section-fade-in {
             animation: fadeIn 0.8s ease-in-out;
@@ -57,6 +64,33 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .btn-neon {
+            background-color: #1F1F3A;
+            color: #00FFFF;
+            border: 1px solid #00FFFF;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-neon:hover {
+            background-color: #00FFFF;
+            color: #0F0F2A;
+            box-shadow: 0 0 10px #00FFFF;
+        }
+        select {
+            background-color: #1F1F3A;
+            color: #E0E0FF;
+            border: 1px solid #3A3A5A;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border-color: #3A3A5A;
+        }
+        thead {
+            background-color: #1F1F3A;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -64,49 +98,49 @@
     <div class="container mx-auto p-4 md:p-8">
 
         <header class="text-center mb-10 md:mb-16 section-fade-in">
-            <h1 class="text-3xl md:text-4xl font-bold text-[#3f3c3a] mb-2">Currency Pair Weekly Bias Analysis</h1>
-            <p class="text-lg text-[#6d6a68]">For the week of July 2, 2025</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-[#00FFFF] mb-2">Price-Trader Analysis</h1>
+            <p class="text-lg text-[#E0E0FF]">For the week of July 2, 2025</p>
         </header>
 
         <!-- Weekly Bias Dashboard -->
         <section id="dashboard" class="mb-12 md:mb-16 section-fade-in">
             <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold mb-2">Weekly Bias Dashboard</h2>
-                <p class="max-w-3xl mx-auto text-[#6d6a68]">This dashboard provides an at-a-glance summary of the weekly trading bias for each currency pair. Click on a card to jump to the detailed analysis for that pair.</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-[#FF00FF] mb-2">Weekly Bias Dashboard</h2>
+                <p class="max-w-3xl mx-auto text-[#E0E0FF]">This dashboard provides an at-a-glance summary of the weekly trading bias for each currency pair. Click on a card to jump to the detailed analysis for that pair.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                 <!-- GBP/CAD Card -->
-                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('gbpcad');" class="bias-card cursor-pointer bg-[#ffffff] p-6 rounded-2xl shadow-md border border-[#EAE6E1]">
+                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('gbpcad');" class="bias-card cursor-pointer bg-[#1F1F3A] p-6 rounded-2xl shadow-lg">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-semibold">GBP/CAD</h3>
-                        <div class="flex items-center space-x-2 text-green-700 bg-green-100 rounded-full px-3 py-1 text-sm font-medium">
+                        <h3 class="text-xl font-semibold text-[#E0E0FF]">GBP/CAD</h3>
+                        <div class="flex items-center space-x-2 text-[#00FF00] bg-[#00FF00]/[0.1] rounded-full px-3 py-1 text-sm font-medium border border-[#00FF00]/[0.3]">
                             <span>🔼</span>
                             <span>Cautiously Bullish</span>
                         </div>
                     </div>
-                    <p class="text-[#6d6a68]">Strong technicals suggest upside, but overextension signals and nuanced central bank policies warrant caution. Potential for a short-term correction exists.</p>
+                    <p class="text-[#E0E0FF]">Strong technicals suggest upside, but overextension signals and nuanced central bank policies warrant caution. Potential for a short-term correction exists.</p>
                 </div>
                 <!-- GBP/JPY Card -->
-                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('gbpjpy');" class="bias-card cursor-pointer bg-[#ffffff] p-6 rounded-2xl shadow-md border border-[#EAE6E1]">
+                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('gbpjpy');" class="bias-card cursor-pointer bg-[#1F1F3A] p-6 rounded-2xl shadow-lg">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-semibold">GBP/JPY</h3>
-                         <div class="flex items-center space-x-2 text-yellow-800 bg-yellow-100 rounded-full px-3 py-1 text-sm font-medium">
+                        <h3 class="text-xl font-semibold text-[#E0E0FF]">GBP/JPY</h3>
+                         <div class="flex items-center space-x-2 text-[#FFFF00] bg-[#FFFF00]/[0.1] rounded-full px-3 py-1 text-sm font-medium border border-[#FFFF00]/[0.3]">
                             <span>↘️</span>
                             <span>Bearish Correctional</span>
                         </div>
                     </div>
-                    <p class="text-[#6d6a68]">Despite recent rallies, technicals show negative momentum. A strengthening Yen, buoyed by safe-haven demand from trade concerns, points to a likely pullback.</p>
+                    <p class="text-[#E0E0FF]">Despite recent rallies, technicals show negative momentum. A strengthening Yen, buoyed by safe-haven demand from trade concerns, points to a likely pullback.</p>
                 </div>
                 <!-- USD/JPY Card -->
-                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('usdjpy');" class="bias-card cursor-pointer bg-[#ffffff] p-6 rounded-2xl shadow-md border border-[#EAE6E1]">
+                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('usdjpy');" class="bias-card cursor-pointer bg-[#1F1F3A] p-6 rounded-2xl shadow-lg">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-xl font-semibold">USD/JPY</h3>
-                        <div class="flex items-center space-x-2 text-red-700 bg-red-100 rounded-full px-3 py-1 text-sm font-medium">
+                        <h3 class="text-xl font-semibold text-[#E0E0FF]">USD/JPY</h3>
+                        <div class="flex items-center space-x-2 text-[#FF0000] bg-[#FF0000]/[0.1] rounded-full px-3 py-1 text-sm font-medium border border-[#FF0000]/[0.3]">
                             <span>🔽</span>
                             <span>Strongly Bearish</span>
                         </div>
                     </div>
-                    <p class="text-[#6d6a68]">Intensifying US-Japan trade tensions and a cautious Fed are reinforcing a sustained appreciation of the Yen. The trend is clearly downwards.</p>
+                    <p class="text-[#E0E0FF]">Intensifying US-Japan trade tensions and a cautious Fed are reinforcing a sustained appreciation of the Yen. The trend is clearly downwards.</p>
                 </div>
             </div>
         </section>
@@ -114,25 +148,25 @@
         <!-- Overarching Market Drivers -->
         <section id="drivers" class="mb-12 md:mb-16 section-fade-in">
             <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold mb-2">Overarching Market Drivers</h2>
-                <p class="max-w-3xl mx-auto text-[#6d6a68]">The currency markets are being shaped by several key global themes. Understanding these provides crucial context for the individual pair biases.</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-[#00FFFF] mb-2">Overarching Market Drivers</h2>
+                <p class="max-w-3xl mx-auto text-[#E0E0FF]">The currency markets are being shaped by several key global themes. Understanding these provides crucial context for the individual pair biases.</p>
             </div>
-            <div class="bg-[#ffffff] p-6 md:p-8 rounded-2xl shadow-md border border-[#EAE6E1]">
-                <ul class="space-y-4 text-[#3f3c3a]">
+            <div class="bg-[#1F1F3A] p-6 md:p-8 rounded-2xl shadow-lg border border-[#3A3A5A]">
+                <ul class="space-y-4 text-[#E0E0FF]">
                     <li class="flex items-start">
-                        <span class="text-xl mr-4 mt-1">🏦</span>
+                        <span class="text-xl mr-4 mt-1 text-[#FF00FF]">🏦</span>
                         <div><strong class="font-semibold">Central Bank "Wait-and-See":</strong> Major central banks (Fed, BoE, BoC) are holding rates, citing uncertainty around inflation and trade. Future moves are highly data-dependent, creating a cautious market environment.</div>
                     </li>
                     <li class="flex items-start">
-                        <span class="text-xl mr-4 mt-1">📜</span>
+                        <span class="text-xl mr-4 mt-1 text-[#FF00FF]">📜</span>
                         <div><strong class="font-semibold">US Trade Policy Impact:</strong> Tariffs are a critical factor, influencing inflation, central bank caution, and driving safe-haven flows toward the Japanese Yen. The US-Japan tariff extension expiry on July 9 is a key date to watch.</div>
                     </li>
                     <li class="flex items-start">
-                        <span class="text-xl mr-4 mt-1">📉</span>
+                        <span class="text-xl mr-4 mt-1 text-[#FF00FF]">📉</span>
                         <div><strong class="font-semibold">Mixed Economic Signals:</strong> While Q1 showed some resilience, the Q2 outlook appears weaker globally. Loosening labor markets in the UK and Canada support arguments for future rate cuts.</div>
                     </li>
                     <li class="flex items-start">
-                        <span class="text-xl mr-4 mt-1">💼</span>
+                        <span class="text-xl mr-4 mt-1 text-[#FF00FF]">💼</span>
                         <div><strong class="font-semibold">Upcoming US Jobs Report:</strong> The US Jobs Report on Thursday, July 3, is the week's most significant data release and could heavily influence USD dynamics and overall market sentiment.</div>
                     </li>
                 </ul>
@@ -143,8 +177,8 @@
         <!-- Detailed Analysis Section -->
         <section id="deep-dive" class="section-fade-in">
              <div class="text-center mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold mb-2">Detailed Analysis</h2>
-                <p class="max-w-3xl mx-auto text-[#6d6a68]">Explore the underlying data driving the weekly biases. Use the tabs to navigate between the macroeconomic context, central bank stances, and an interactive deep dive into each currency pair.</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-[#FF00FF] mb-2">Detailed Analysis</h2>
+                <p class="max-w-3xl mx-auto text-[#E0E0FF]">Explore the underlying data driving the weekly biases. Use the tabs to navigate between the macroeconomic context, central bank stances, and an interactive deep dive into each currency pair.</p>
             </div>
 
             <!-- Tabs -->
@@ -154,13 +188,13 @@
             </div>
 
             <!-- Tab Content -->
-            <div id="tab-content" class="bg-[#ffffff] p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-[#EAE6E1]">
+            <div id="tab-content" class="bg-[#1F1F3A] p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-[#3A3A5A]">
                 
                 <!-- Central Banks Content -->
                 <div id="tab-content-banks">
                     <div class="text-center mb-8">
-                        <h3 class="text-xl font-bold">Central Bank Policy Stances</h3>
-                        <p class="max-w-2xl mx-auto text-[#6d6a68] mt-1">A comparative look at the current interest rates and policy outlooks of the key central banks influencing these currency pairs.</p>
+                        <h3 class="text-xl font-bold text-[#00FFFF]">Central Bank Policy Stances</h3>
+                        <p class="max-w-2xl mx-auto text-[#E0E0FF] mt-1">A comparative look at the current interest rates and policy outlooks of the key central banks influencing these currency pairs.</p>
                     </div>
 
                     <div class="chart-container mb-12">
@@ -168,13 +202,13 @@
                     </div>
 
                     <div class="flex justify-center flex-wrap gap-3 mb-6">
-                         <button id="bank-btn-boe" class="bank-btn px-4 py-2 rounded-md text-sm" onclick="showBankDetails('boe')">Bank of England (BoE)</button>
-                         <button id="bank-btn-boc" class="bank-btn px-4 py-2 rounded-md text-sm" onclick="showBankDetails('boc')">Bank of Canada (BoC)</button>
-                         <button id="bank-btn-boj" class="bank-btn px-4 py-2 rounded-md text-sm" onclick="showBankDetails('boj')">Bank of Japan (BoJ)</button>
-                         <button id="bank-btn-fed" class="bank-btn px-4 py-2 rounded-md text-sm" onclick="showBankDetails('fed')">Federal Reserve (Fed)</button>
+                         <button id="bank-btn-boe" class="bank-btn px-4 py-2 rounded-md text-sm btn-neon" onclick="showBankDetails('boe')">Bank of England (BoE)</button>
+                         <button id="bank-btn-boc" class="bank-btn px-4 py-2 rounded-md text-sm btn-neon" onclick="showBankDetails('boc')">Bank of Canada (BoC)</button>
+                         <button id="bank-btn-boj" class="bank-btn px-4 py-2 rounded-md text-sm btn-neon" onclick="showBankDetails('boj')">Bank of Japan (BoJ)</button>
+                         <button id="bank-btn-fed" class="bank-btn px-4 py-2 rounded-md text-sm btn-neon" onclick="showBankDetails('fed')">Federal Reserve (Fed)</button>
                     </div>
 
-                    <div id="bank-details-content" class="p-4 bg-[#FDFBF8] rounded-lg min-h-[150px]">
+                    <div id="bank-details-content" class="p-4 bg-[#0F0F2A] rounded-lg min-h-[150px] border border-[#3A3A5A] text-[#E0E0FF]">
                         <!-- JS will populate this -->
                     </div>
                 </div>
@@ -182,12 +216,12 @@
                 <!-- Pair Deep Dive Content -->
                 <div id="tab-content-pairs" class="hidden">
                     <div class="text-center mb-6">
-                        <h3 class="text-xl font-bold">Currency Pair Deep Dive</h3>
-                        <p class="max-w-2xl mx-auto text-[#6d6a68] mt-1">Select a currency pair to view its fundamental drivers, technical analysis, and key price levels for the week.</p>
+                        <h3 class="text-xl font-bold text-[#00FFFF]">Currency Pair Deep Dive</h3>
+                        <p class="max-w-2xl mx-auto text-[#E0E0FF] mt-1">Select a currency pair to view its fundamental drivers, technical analysis, and key price levels for the week.</p>
                     </div>
                     
                     <div class="flex justify-center mb-8">
-                        <select id="pair-selector" class="p-2 border border-[#ccc] rounded-lg bg-white">
+                        <select id="pair-selector" class="p-2 border border-[#3A3A5A] rounded-lg bg-[#0F0F2A] text-[#00FFFF]">
                             <option value="gbpcad">GBP/CAD</option>
                             <option value="gbpjpy">GBP/JPY</option>
                             <option value="usdjpy">USD/JPY</option>
@@ -197,7 +231,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                         <!-- Left side: Chart -->
                         <div class="w-full">
-                            <h4 id="pair-chart-title" class="text-lg font-semibold text-center mb-4"></h4>
+                            <h4 id="pair-chart-title" class="text-lg font-semibold text-center mb-4 text-[#FF00FF]"></h4>
                              <div class="chart-container">
                                 <canvas id="pairPriceChart"></canvas>
                             </div>
@@ -206,26 +240,26 @@
                         <!-- Right side: Details -->
                         <div class="space-y-6">
                             <div>
-                                <h4 class="text-lg font-semibold mb-2">Fundamental Factors</h4>
-                                <p id="pair-fundamentals" class="text-[#6d6a68] text-sm"></p>
+                                <h4 class="text-lg font-semibold mb-2 text-[#00FFFF]">Fundamental Factors</h4>
+                                <p id="pair-fundamentals" class="text-[#E0E0FF] text-sm"></p>
                             </div>
                             <div>
-                                <h4 class="text-lg font-semibold mb-2">Technical Analysis</h4>
-                                <p id="pair-technicals" class="text-[#6d6a68] text-sm"></p>
+                                <h4 class="text-lg font-semibold mb-2 text-[#00FFFF]">Technical Analysis</h4>
+                                <p id="pair-technicals" class="text-[#E0E0FF] text-sm"></p>
                             </div>
                             <div>
-                                <h4 class="text-lg font-semibold mb-2">Key Levels</h4>
+                                <h4 class="text-lg font-semibold mb-2 text-[#00FFFF]">Key Levels</h4>
                                 <div class="overflow-x-auto">
-                                    <table class="w-full text-sm text-left">
-                                        <thead class="bg-[#EAE6E1] text-[#3f3c3a]">
+                                    <table class="w-full text-sm text-left border border-[#3A3A5A] rounded-lg overflow-hidden">
+                                        <thead class="bg-[#1F1F3A] text-[#00FFFF]">
                                             <tr>
-                                                <th class="p-2 rounded-l-lg">Type</th>
+                                                <th class="p-2 rounded-tl-lg">Type</th>
                                                 <th class="p-2">Level 1</th>
                                                 <th class="p-2">Level 2</th>
-                                                <th class="p-2 rounded-r-lg">Level 3</th>
+                                                <th class="p-2 rounded-tr-lg">Level 3</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="key-levels-table">
+                                        <tbody id="key-levels-table" class="text-[#E0E0FF]">
                                            <!-- JS will populate this -->
                                         </tbody>
                                     </table>
@@ -319,8 +353,8 @@
                         datasets: [{
                             label: 'Current Policy Interest Rate (%)',
                             data: Object.values(appData.banks).map(b => b.rate),
-                            backgroundColor: ['#A69E92', '#B9B1A8', '#D3CCC2', '#EAE6E1'],
-                            borderColor: '#3f3c3a',
+                            backgroundColor: ['#00FFFF', '#FF00FF', '#00FF00', '#FFFF00'], /* Neon colors */
+                            borderColor: '#E0E0FF',
                             borderWidth: 1
                         }]
                     },
@@ -334,23 +368,28 @@
                                 display: true,
                                 text: 'Central Bank Policy Rates Comparison',
                                 font: { size: 16 },
-                                color: '#3f3c3a'
+                                color: '#E0E0FF' /* Light Lavender text */
                             },
                              tooltip: {
                                 callbacks: {
                                     label: function(context) {
                                         return `Rate: ${context.raw.toFixed(2)}%`;
                                     }
-                                }
+                                },
+                                backgroundColor: '#1F1F3A', /* Dark background for tooltips */
+                                titleColor: '#00FFFF',
+                                bodyColor: '#E0E0FF',
+                                borderColor: '#00FFFF',
+                                borderWidth: 1
                             }
                         },
                         scales: {
                             x: {
                                 grid: {
-                                    color: '#EAE6E1'
+                                    color: '#3A3A5A' /* Subtle grid lines */
                                 },
                                 ticks: {
-                                    color: '#6d6a68'
+                                    color: '#E0E0FF' /* Light Lavender ticks */
                                 }
                             },
                             y: {
@@ -358,7 +397,7 @@
                                     display: false
                                 },
                                 ticks: {
-                                    color: '#6d6a68'
+                                    color: '#E0E0FF' /* Light Lavender ticks */
                                 }
                             }
                         }
@@ -379,8 +418,8 @@
                         datasets: [{
                             label: pairData.name,
                             data: pairData.chartData.values,
-                            borderColor: '#A69E92',
-                            backgroundColor: 'rgba(166, 158, 146, 0.1)',
+                            borderColor: '#00FFFF', /* Neon Cyan line */
+                            backgroundColor: 'rgba(0, 255, 255, 0.1)', /* Slightly transparent neon fill */
                             fill: true,
                             tension: 0.1
                         }]
@@ -393,6 +432,11 @@
                             tooltip: {
                                 mode: 'index',
                                 intersect: false,
+                                backgroundColor: '#1F1F3A', /* Dark background for tooltips */
+                                titleColor: '#00FFFF',
+                                bodyColor: '#E0E0FF',
+                                borderColor: '#00FFFF',
+                                borderWidth: 1
                             },
                         },
                         scales: {
@@ -401,15 +445,15 @@
                                     display: false
                                 },
                                 ticks: {
-                                    color: '#6d6a68'
+                                    color: '#E0E0FF' /* Light Lavender ticks */
                                 }
                             },
                             y: {
                                 grid: {
-                                    color: '#EAE6E1'
+                                    color: '#3A3A5A' /* Subtle grid lines */
                                 },
                                 ticks: {
-                                    color: '#6d6a68'
+                                    color: '#E0E0FF' /* Light Lavender ticks */
                                 }
                             }
                         }
@@ -432,14 +476,14 @@
             window.showBankDetails = (bankKey) => {
                 const bankData = appData.banks[bankKey];
                 const contentEl = document.getElementById('bank-details-content');
-                contentEl.innerHTML = `<h5 class="font-bold mb-2">${bankData.name} - ${bankData.rate}%</h5><p class="text-sm text-[#6d6a68]">${bankData.summary}</p>`;
+                contentEl.innerHTML = `<h5 class="font-bold mb-2 text-[#FF00FF]">${bankData.name} - ${bankData.rate}%</h5><p class="text-sm text-[#E0E0FF]">${bankData.summary}</p>`;
                 
                 document.querySelectorAll('.bank-btn').forEach(btn => {
                     btn.classList.remove('active-tab');
-                    btn.classList.add('inactive-tab');
+                    btn.classList.add('btn-neon'); /* Ensure it goes back to neon style */
                 });
                 document.getElementById(`bank-btn-${bankKey}`).classList.add('active-tab');
-                document.getElementById(`bank-btn-${bankKey}`).classList.remove('inactive-tab');
+                document.getElementById(`bank-btn-${bankKey}`).classList.remove('btn-neon');
             };
 
             window.updatePairDetails = (pairKey) => {
@@ -451,10 +495,10 @@
                 tableBody.innerHTML = '';
                 Object.keys(pairData.levels).forEach(key => {
                     const row = document.createElement('tr');
-                    row.className = 'border-b border-[#EAE6E1]';
-                    let rowHtml = `<td class="p-2 font-medium">${key}</td>`;
+                    row.className = 'border-b border-[#3A3A5A]'; /* Darker border for rows */
+                    let rowHtml = `<td class="p-2 font-medium text-[#00FFFF]">${key}</td>`; /* Neon for key */
                     pairData.levels[key].forEach(level => {
-                        rowHtml += `<td class="p-2">${level}</td>`;
+                        rowHtml += `<td class="p-2 text-[#E0E0FF]">${level}</td>`; /* Light text for levels */
                     });
                     row.innerHTML = rowHtml;
                     tableBody.appendChild(row);
