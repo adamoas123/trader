@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Pair Weekly Bias Analysis | July 2, 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutral Harmony -->
+    <!-- Application Structure Plan: A top-down, progressive disclosure model. The app starts with a high-level "Weekly Bias Dashboard" showing the final conclusions for immediate user understanding. It then provides a summary of "Overarching Market Drivers" for context. Finally, a tab-based "Detailed Analysis" section allows users to explore the granular data (Central Bank policies, individual pair analysis with charts and technicals) without being overwhelmed. This non-linear, interactive structure is chosen over the report's linear format to empower users to quickly find the information most relevant to them, enhancing usability and information retention. -->
+    <!-- Visualization & Content Choices:
+        - Report Info: Executive Summary Biases -> Goal: Inform -> Viz/Presentation: Large summary cards with icons -> Interaction: Click to scroll to detail -> Justification: Provides the core "answer" instantly.
+        - Report Info: Central Bank Interest Rates -> Goal: Compare -> Viz/Presentation: Horizontal Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: A quick, effective visual comparison of policy stances.
+        - Report Info: Detailed Pair Analysis (Fundamentals, Technicals, Key Levels) -> Goal: Analyze -> Viz/Presentation: Dropdown-controlled content area with a dynamic Line Chart (Chart.js) and a structured HTML table -> Interaction: User selects a pair, triggering JS to update chart data, text content, and table values -> Justification: Consolidates all data for a single pair into one interactive view, allowing for focused analysis and direct comparison between pairs.
+        - Report Info: Central Bank Policy Summaries -> Goal: Organize/Inform -> Viz/Presentation: Tab-like button navigation -> Interaction: Click to show/hide relevant text block -> Justification: Organizes detailed textual information neatly, preventing a wall of text.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8; /* Warm off-white */
+            color: #3f3c3a; /* Muted dark brown/grey */
+        }
+        .active-tab {
+            background-color: #A69E92; /* Muted accent */
+            color: #FDFBF8;
+        }
+        .inactive-tab {
+            background-color: #EAE6E1; /* Light neutral */
+            color: #6d6a68;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            max-height: 40vh;
+            width: 100%;
+            max-width: 800px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .bias-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bias-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .section-fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-10 md:mb-16 section-fade-in">
+            <h1 class="text-3xl md:text-4xl font-bold text-[#3f3c3a] mb-2">Currency Pair Weekly Bias Analysis</h1>
+            <p class="text-lg text-[#6d6a68]">For the week of July 2, 2025</p>
+        </header>
+
+        <!-- Weekly Bias Dashboard -->
+        <section id="dashboard" class="mb-12 md:mb-16 section-fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Weekly Bias Dashboard</h2>
+                <p class="max-w-3xl mx-auto text-[#6d6a68]">This dashboard provides an at-a-glance summary of the weekly trading bias for each currency pair. Click on a card to jump to the detailed analysis for that pair.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                <!-- GBP/CAD Card -->
+                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('gbpcad');" class="bias-card cursor-pointer bg-[#ffffff] p-6 rounded-2xl shadow-md border border-[#EAE6E1]">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-semibold">GBP/CAD</h3>
+                        <div class="flex items-center space-x-2 text-green-700 bg-green-100 rounded-full px-3 py-1 text-sm font-medium">
+                            <span>🔼</span>
+                            <span>Cautiously Bullish</span>
+                        </div>
+                    </div>
+                    <p class="text-[#6d6a68]">Strong technicals suggest upside, but overextension signals and nuanced central bank policies warrant caution. Potential for a short-term correction exists.</p>
+                </div>
+                <!-- GBP/JPY Card -->
+                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('gbpjpy');" class="bias-card cursor-pointer bg-[#ffffff] p-6 rounded-2xl shadow-md border border-[#EAE6E1]">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-semibold">GBP/JPY</h3>
+                         <div class="flex items-center space-x-2 text-yellow-800 bg-yellow-100 rounded-full px-3 py-1 text-sm font-medium">
+                            <span>↘️</span>
+                            <span>Bearish Correctional</span>
+                        </div>
+                    </div>
+                    <p class="text-[#6d6a68]">Despite recent rallies, technicals show negative momentum. A strengthening Yen, buoyed by safe-haven demand from trade concerns, points to a likely pullback.</p>
+                </div>
+                <!-- USD/JPY Card -->
+                <div onclick="document.getElementById('deep-dive').scrollIntoView({ behavior: 'smooth' }); updatePairDetails('usdjpy');" class="bias-card cursor-pointer bg-[#ffffff] p-6 rounded-2xl shadow-md border border-[#EAE6E1]">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xl font-semibold">USD/JPY</h3>
+                        <div class="flex items-center space-x-2 text-red-700 bg-red-100 rounded-full px-3 py-1 text-sm font-medium">
+                            <span>🔽</span>
+                            <span>Strongly Bearish</span>
+                        </div>
+                    </div>
+                    <p class="text-[#6d6a68]">Intensifying US-Japan trade tensions and a cautious Fed are reinforcing a sustained appreciation of the Yen. The trend is clearly downwards.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Overarching Market Drivers -->
+        <section id="drivers" class="mb-12 md:mb-16 section-fade-in">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Overarching Market Drivers</h2>
+                <p class="max-w-3xl mx-auto text-[#6d6a68]">The currency markets are being shaped by several key global themes. Understanding these provides crucial context for the individual pair biases.</p>
+            </div>
+            <div class="bg-[#ffffff] p-6 md:p-8 rounded-2xl shadow-md border border-[#EAE6E1]">
+                <ul class="space-y-4 text-[#3f3c3a]">
+                    <li class="flex items-start">
+                        <span class="text-xl mr-4 mt-1">🏦</span>
+                        <div><strong class="font-semibold">Central Bank "Wait-and-See":</strong> Major central banks (Fed, BoE, BoC) are holding rates, citing uncertainty around inflation and trade. Future moves are highly data-dependent, creating a cautious market environment.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-xl mr-4 mt-1">📜</span>
+                        <div><strong class="font-semibold">US Trade Policy Impact:</strong> Tariffs are a critical factor, influencing inflation, central bank caution, and driving safe-haven flows toward the Japanese Yen. The US-Japan tariff extension expiry on July 9 is a key date to watch.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-xl mr-4 mt-1">📉</span>
+                        <div><strong class="font-semibold">Mixed Economic Signals:</strong> While Q1 showed some resilience, the Q2 outlook appears weaker globally. Loosening labor markets in the UK and Canada support arguments for future rate cuts.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-xl mr-4 mt-1">💼</span>
+                        <div><strong class="font-semibold">Upcoming US Jobs Report:</strong> The US Jobs Report on Thursday, July 3, is the week's most significant data release and could heavily influence USD dynamics and overall market sentiment.</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- Detailed Analysis Section -->
+        <section id="deep-dive" class="section-fade-in">
+             <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Detailed Analysis</h2>
+                <p class="max-w-3xl mx-auto text-[#6d6a68]">Explore the underlying data driving the weekly biases. Use the tabs to navigate between the macroeconomic context, central bank stances, and an interactive deep dive into each currency pair.</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mb-8 flex justify-center flex-wrap gap-2">
+                <button id="tab-btn-banks" class="px-4 py-2 text-sm md:text-base font-medium rounded-lg inactive-tab" onclick="switchTab('banks')">Central Banks</button>
+                <button id="tab-btn-pairs" class="px-4 py-2 text-sm md:text-base font-medium rounded-lg inactive-tab" onclick="switchTab('pairs')">Pair Deep Dive</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="tab-content" class="bg-[#ffffff] p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg border border-[#EAE6E1]">
+                
+                <!-- Central Banks Content -->
+                <div id="tab-content-banks">
+                    <div class="text-center mb-8">
+                        <h3 class="text-xl font-bold">Central Bank Policy Stances</h3>
+                        <p class="max-w-2xl mx-auto text-[#6d6a68] mt-1">A comparative look at the current interest rates and policy outlooks of the key central banks influencing these currency pairs.</p>
+                    </div>
+
+                    <div class="chart-container mb-12">
+                        <canvas id="centralBankRateChart"></canvas>
+                    </div>
+
+                    <div class="flex justify-center flex-wrap gap-3 mb-6">
+                         <button id="bank-btn-boe" class="bank-btn px-4 py-2 rounded-md text-sm" onclick="showBankDetails('boe')">Bank of England (BoE)</button>
+                         <button id="bank-btn-boc" class="bank-btn px-4 py-2 rounded-md text-sm" onclick="showBankDetails('boc')">Bank of Canada (BoC)</button>
+                         <button id="bank-btn-boj" class="bank-btn px-4 py-2 rounded-md text-sm" onclick="showBankDetails('boj')">Bank of Japan (BoJ)</button>
+                         <button id="bank-btn-fed" class="bank-btn px-4 py-2 rounded-md text-sm" onclick="showBankDetails('fed')">Federal Reserve (Fed)</button>
+                    </div>
+
+                    <div id="bank-details-content" class="p-4 bg-[#FDFBF8] rounded-lg min-h-[150px]">
+                        <!-- JS will populate this -->
+                    </div>
+                </div>
+
+                <!-- Pair Deep Dive Content -->
+                <div id="tab-content-pairs" class="hidden">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold">Currency Pair Deep Dive</h3>
+                        <p class="max-w-2xl mx-auto text-[#6d6a68] mt-1">Select a currency pair to view its fundamental drivers, technical analysis, and key price levels for the week.</p>
+                    </div>
+                    
+                    <div class="flex justify-center mb-8">
+                        <select id="pair-selector" class="p-2 border border-[#ccc] rounded-lg bg-white">
+                            <option value="gbpcad">GBP/CAD</option>
+                            <option value="gbpjpy">GBP/JPY</option>
+                            <option value="usdjpy">USD/JPY</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        <!-- Left side: Chart -->
+                        <div class="w-full">
+                            <h4 id="pair-chart-title" class="text-lg font-semibold text-center mb-4"></h4>
+                             <div class="chart-container">
+                                <canvas id="pairPriceChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Right side: Details -->
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-lg font-semibold mb-2">Fundamental Factors</h4>
+                                <p id="pair-fundamentals" class="text-[#6d6a68] text-sm"></p>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-2">Technical Analysis</h4>
+                                <p id="pair-technicals" class="text-[#6d6a68] text-sm"></p>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold mb-2">Key Levels</h4>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm text-left">
+                                        <thead class="bg-[#EAE6E1] text-[#3f3c3a]">
+                                            <tr>
+                                                <th class="p-2 rounded-l-lg">Type</th>
+                                                <th class="p-2">Level 1</th>
+                                                <th class="p-2">Level 2</th>
+                                                <th class="p-2 rounded-r-lg">Level 3</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="key-levels-table">
+                                           <!-- JS will populate this -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- DATA STORE ---
+            const appData = {
+                banks: {
+                    boe: {
+                        name: 'Bank of England (BoE)',
+                        rate: 4.25,
+                        summary: 'Maintained Bank Rate at 4.25% in a 6-3 vote, showing internal division. Concerns over services inflation persist, but markets anticipate a rate cut as early as August due to a loosening labor market, suggesting a dovish pivot.'
+                    },
+                    boc: {
+                        name: 'Bank of Canada (BoC)',
+                        rate: 2.75,
+                        summary: 'Held its rate at 2.75% despite strong Q1 GDP. The decision highlights high sensitivity to core inflation and major uncertainty around US trade policies. The BoC is holding steady to gather more information, lending relative support to the CAD.'
+                    },
+                    boj: {
+                        name: 'Bank of Japan (BoJ)',
+                        rate: 0.5,
+                        summary: 'Unanimously kept its rate at 0.5% and announced a gradual reduction in JGB purchases. The BoJ cited "high uncertainty" from trade policies as a key reason for its dovish stance, though this same uncertainty can boost the JPY as a safe haven.'
+                    },
+                    fed: {
+                        name: 'Federal Reserve (Fed)',
+                        rate: 4.50, // Taking upper bound of 4.25-4.5
+                        summary: 'Unanimously held the federal funds rate at 4.25%-4.5%. The Fed is in "wait-and-see" mode, acknowledging that tariff impacts are still developing. While the consensus is for two cuts in 2025, more members now expect no cuts, suggesting a cautious outlook.'
+                    }
+                },
+                pairs: {
+                    gbpcad: {
+                        name: 'GBP/CAD',
+                        title: 'GBP/CAD Recent Price Action',
+                        chartData: { labels: ['Day -4', 'Day -3', 'Day -2', 'Day -1', 'Today'], values: [1.868, 1.865, 1.882, 1.871, 1.874] },
+                        fundamentals: 'The outlook is shaped by divergent signals. The BoE appears to be leaning dovish with an expected August rate cut, potentially weakening GBP. In contrast, the BoC remains on hold due to US trade uncertainty, providing underlying support for the CAD, creating a nuanced and cautious dynamic.',
+                        technicals: 'A strong bullish trend is prevalent on the 1H timeframe, but signs of overextension are clear. The CCI is overbought, and bearish divergences are appearing on the RSI. While the trend is up, the risk of a short-term correction is high as it approaches resistance.',
+                        levels: {
+                            Support: ['1.8590 (Major)', '1.8532', '1.8484'],
+                            Resistance: ['1.8792', '1.8901', '1.9154'],
+                            Pivot: ['R1: 1.8660', 'R2: 1.8722', 'R3: 1.8844']
+                        }
+                    },
+                    gbpjpy: {
+                        name: 'GBP/JPY',
+                        title: 'GBP/JPY Recent Price Action',
+                        chartData: { labels: ['Day -4', 'Day -3', 'Day -2', 'Day -1', 'Today'], values: [197.8, 197.3, 198.4, 196.9, 197.3] },
+                        fundamentals: 'A potentially dovish BoE contrasts with a BoJ that, while holding rates, sees the Yen benefit from safe-haven flows due to trade uncertainty. This fundamental backdrop supports a correctional move, favoring a stronger JPY against a potentially weaker GBP.',
+                        technicals: 'Conflicting signals exist, but negative momentum is growing. The stochastic indicator has exited overbought territory, suggesting a bearish correctional track is likely. A strong barrier at 198.80 could cap upside, forcing a pullback towards channel support.',
+                        levels: {
+                            Support: ['196.10', '193.99', '175.94 (Major)'],
+                            Resistance: ['198.80 (Strong)', '199.79', '204.14'],
+                            Pivot: ['P: 197.84', 'R1: 198.46', 'S1: 197.20']
+                        }
+                    },
+                    usdjpy: {
+                        name: 'USD/JPY',
+                        title: 'USD/JPY Recent Price Action',
+                        chartData: { labels: ['Day -4', 'Day -3', 'Day -2', 'Day -1', 'Today'], values: [144.5, 144.8, 144.1, 143.8, 143.7] },
+                        fundamentals: 'The outlook is dominated by direct US-Japan trade tensions, with tariff threats strengthening the Yen as a safe-haven asset. The Fed\'s cautious "wait-and-see" stance offers little support to the USD, which is being overshadowed by geopolitical risk, creating a strong bearish fundamental case.',
+                        technicals: 'A clear downtrend is established within a short-term bearish channel. Selling pressure intensified after breaking key long-term support. Momentum indicators like RSI and MACD are deeply negative, confirming overwhelming bearish sentiment and pointing to further declines.',
+                        levels: {
+                            Support: ['142.85', '142.15', '140.25 (Major)'],
+                            Resistance: ['143.75', '148.00', '151.00'],
+                            Forecast: ['Decline to 142.15', 'Risk to 138.00', '']
+                        }
+                    }
+                }
+            };
+
+            // --- CHART INSTANCES ---
+            let centralBankChart, pairChart;
+
+            function createCentralBankChart() {
+                const ctx = document.getElementById('centralBankRateChart').getContext('2d');
+                if (centralBankChart) centralBankChart.destroy();
+                centralBankChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.values(appData.banks).map(b => b.name),
+                        datasets: [{
+                            label: 'Current Policy Interest Rate (%)',
+                            data: Object.values(appData.banks).map(b => b.rate),
+                            backgroundColor: ['#A69E92', '#B9B1A8', '#D3CCC2', '#EAE6E1'],
+                            borderColor: '#3f3c3a',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: {
+                                display: true,
+                                text: 'Central Bank Policy Rates Comparison',
+                                font: { size: 16 },
+                                color: '#3f3c3a'
+                            },
+                             tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Rate: ${context.raw.toFixed(2)}%`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    color: '#EAE6E1'
+                                },
+                                ticks: {
+                                    color: '#6d6a68'
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#6d6a68'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function createPairPriceChart(pairKey) {
+                const ctx = document.getElementById('pairPriceChart').getContext('2d');
+                const pairData = appData.pairs[pairKey];
+                document.getElementById('pair-chart-title').textContent = pairData.title;
+
+                if (pairChart) pairChart.destroy();
+                pairChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: pairData.chartData.labels,
+                        datasets: [{
+                            label: pairData.name,
+                            data: pairData.chartData.values,
+                            borderColor: '#A69E92',
+                            backgroundColor: 'rgba(166, 158, 146, 0.1)',
+                            fill: true,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                        },
+                        scales: {
+                             x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#6d6a68'
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    color: '#EAE6E1'
+                                },
+                                ticks: {
+                                    color: '#6d6a68'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- UI UPDATE LOGIC ---
+            window.switchTab = (tabName) => {
+                ['banks', 'pairs'].forEach(tab => {
+                    document.getElementById(`tab-content-${tab}`).classList.add('hidden');
+                    document.getElementById(`tab-btn-${tab}`).classList.remove('active-tab');
+                    document.getElementById(`tab-btn-${tab}`).classList.add('inactive-tab');
+                });
+                document.getElementById(`tab-content-${tabName}`).classList.remove('hidden');
+                document.getElementById(`tab-btn-${tabName}`).classList.add('active-tab');
+                document.getElementById(`tab-btn-${tabName}`).classList.remove('inactive-tab');
+            };
+
+            window.showBankDetails = (bankKey) => {
+                const bankData = appData.banks[bankKey];
+                const contentEl = document.getElementById('bank-details-content');
+                contentEl.innerHTML = `<h5 class="font-bold mb-2">${bankData.name} - ${bankData.rate}%</h5><p class="text-sm text-[#6d6a68]">${bankData.summary}</p>`;
+                
+                document.querySelectorAll('.bank-btn').forEach(btn => {
+                    btn.classList.remove('active-tab');
+                    btn.classList.add('inactive-tab');
+                });
+                document.getElementById(`bank-btn-${bankKey}`).classList.add('active-tab');
+                document.getElementById(`bank-btn-${bankKey}`).classList.remove('inactive-tab');
+            };
+
+            window.updatePairDetails = (pairKey) => {
+                const pairData = appData.pairs[pairKey];
+                document.getElementById('pair-fundamentals').textContent = pairData.fundamentals;
+                document.getElementById('pair-technicals').textContent = pairData.technicals;
+                
+                const tableBody = document.getElementById('key-levels-table');
+                tableBody.innerHTML = '';
+                Object.keys(pairData.levels).forEach(key => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-[#EAE6E1]';
+                    let rowHtml = `<td class="p-2 font-medium">${key}</td>`;
+                    pairData.levels[key].forEach(level => {
+                        rowHtml += `<td class="p-2">${level}</td>`;
+                    });
+                    row.innerHTML = rowHtml;
+                    tableBody.appendChild(row);
+                });
+
+                document.getElementById('pair-selector').value = pairKey;
+                createPairPriceChart(pairKey);
+            };
+
+            document.getElementById('pair-selector').addEventListener('change', (e) => {
+                updatePairDetails(e.target.value);
+            });
+
+            // --- INITIALIZATION ---
+            switchTab('banks');
+            createCentralBankChart();
+            showBankDetails('boe');
+            updatePairDetails('gbpcad'); // Init pair tab with first pair
+        });
+    </script>
+
+</body>
+</html>
